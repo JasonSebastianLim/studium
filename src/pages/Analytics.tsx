@@ -73,8 +73,8 @@ const Analytics = () => {
   }, []);
 
   return (
-    <div className="p-5 bg-gray-100 min-h-screen">
-       <header className="flex justify-between items-center bg-white/10 backdrop-blur-md rounded-b-lg p-4 shadow-sm z-20 relative">
+    <div className="pt-0 bg-gray-100 min-h-screen space-y-6">
+       <header className="flex justify-between items-center bg-gradient-to-r from-purple-400 to-pink-500 rounded-b-lg p-4 shadow-sm z-20 relative">
         <div className="flex items-center">
           <img src="/assets/Logo.png" alt="Logo" className="h-8 w-8" />
         </div>
@@ -88,7 +88,7 @@ const Analytics = () => {
           <Link href="/SoloStudy" className="text-white font-semibold hover:text-purple-400 transition duration-300">
             Solo Study
           </Link>
-          <Link href="/analytics" className="text-white font-semibold hover:text-purple-400 transition duration-300">
+          <Link href="/analytics" className="text-purple font-semibold hover:text-purple-400 transition duration-300">
             Analytics
           </Link>
         </nav>

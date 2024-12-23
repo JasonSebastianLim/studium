@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Timer from '../components/Timer';
 import GoalsInput from '../components/Goals';
 import AudioControls from '../components/Audio';
@@ -7,19 +7,19 @@ import Link from 'next/link';
 import BackgroundChooser from '../components/Background';
 
 export default function SoloStudy() {
-  const [backgroundImage, setBackgroundImage] = useState('/assets/GIF-anime.mp4'); // Default background
-  const [previousBackground, setPreviousBackground] = useState<string | null>(null); // Track previous background
-  const [isFading, setIsFading] = useState(false); // Control fading animation
-  const [selectedBackgroundIndex, setSelectedBackgroundIndex] = useState(0); // Default selected index
+  const [backgroundImage, setBackgroundImage] = useState('/assets/GIF-anime.mp4');
+  const [previousBackground, setPreviousBackground] = useState<string | null>(null);
+  const [isFading, setIsFading] = useState(false);
+  const [selectedBackgroundIndex, setSelectedBackgroundIndex] = useState(0);
   const [audioLink, setAudioLink] = useState('');
   const [isYouTube, setIsYouTube] = useState(false);
+  const [isZenMode, setIsZenMode] = useState(false);
 
-  // Available backgrounds with paths and thumbnails
   const availableBackgrounds = [
     { path: '/assets/GIF-anime.mp4', thumbnail: '/assets/thumbnail-1.jpeg' },
     { path: '/assets/GIF-anime-2.mp4', thumbnail: '/assets/thumbnail-2.jpeg' },
     { path: '/assets/GIF-anime-3.mp4', thumbnail: '/assets/thumbnail-3.jpeg' },
-    { path: '/assets/background3.jpg', thumbnail: '/assets/thumbnail-4.jpeg' },
+    { path: '/assets/GIF-anime-4.mp4', thumbnail: '/assets/thumbnail-4.jpeg' },
   ];
 
   const handleAudioChange = (link: string) => {
@@ -35,16 +35,20 @@ export default function SoloStudy() {
   const handleBackgroundChange = (imagePath: string) => {
     if (imagePath !== backgroundImage) {
       setIsFading(true);
-      setPreviousBackground(backgroundImage); // Save the current background
+      setPreviousBackground(backgroundImage);
       setTimeout(() => {
         setBackgroundImage(imagePath);
-        setPreviousBackground(null); // Clear the previous background after transition
+        setPreviousBackground(null);
         setIsFading(false);
-      }, 500); // Duration matches CSS transition
+      }, 500);
     }
 
     const index = availableBackgrounds.findIndex((bg) => bg.path === imagePath);
-    setSelectedBackgroundIndex(index >= 0 ? index : 0); // Fallback to index 0 if not found
+    setSelectedBackgroundIndex(index >= 0 ? index : 0);
+  };
+
+  const toggleZenMode = () => {
+    setIsZenMode(!isZenMode);
   };
 
   return (
@@ -96,43 +100,57 @@ export default function SoloStudy() {
       </div>
 
       {/* Header */}
-      <header className="flex justify-between items-center bg-white/10 backdrop-blur-md rounded-b-lg p-4 shadow-sm z-20 relative">
-        <div className="flex items-center">
-          <img src="/assets/Logo.png" alt="Logo" className="h-8 w-8" />
-        </div>
-        <nav className="flex space-x-6">
-          <Link href="/" className="text-white font-semibold hover:text-purple-400 transition duration-300">
-            Home
-          </Link>
-          <Link href="/Schedule" className="text-white font-semibold hover:text-purple-400 transition duration-300">
-            Schedule
-          </Link>
-          <Link href="/SoloStudy" className="text-white font-semibold hover:text-purple-400 transition duration-300">
-            Solo Study
-          </Link>
-          <Link href="/analytics" className="text-white font-semibold hover:text-purple-400 transition duration-300">
-            Analytics
-          </Link>
-        </nav>
-      </header>
+      {!isZenMode && (
+        <header className="flex justify-between items-center bg-transparent rounded-b-lg p-4 shadow-sm z-20 relative">
+          <div className="flex items-center">
+            <img src="/assets/Logo.png" alt="Logo" className="h-8 w-8" />
+          </div>
+          <nav className="flex space-x-6">
+            <Link href="/" className="text-white font-semibold hover:text-purple-400 transition duration-300">
+              Home
+            </Link>
+            <Link href="/Schedule" className="text-white font-semibold hover:text-purple-400 transition duration-300">
+              Schedule
+            </Link>
+            <Link href="/SoloStudy" className="text-white font-semibold hover:text-purple-400 transition duration-300">
+              Solo Study
+            </Link>
+            <Link href="/Analytics" className="text-white font-semibold hover:text-purple-400 transition duration-300">
+              Analytics
+            </Link>
+          </nav>
+        </header>
+      )}
+
+      {/* Zen Mode Toggle Button */}
+      <button
+        onClick={toggleZenMode}
+        className="fixed bottom-4 right-4 text-white bg-purple-500 px-3 py-1 rounded-lg hover:bg-purple-700 transition duration-300 z-30"
+      >
+        {isZenMode ? 'Exit Zen Mode' : 'Enter Zen Mode'}
+      </button>
 
       {/* Main Content */}
       <main className="relative z-10 p-6 flex justify-between space-x-6">
         {/* Left Column */}
-        <div className="space-y-6 w-1/3">
-          <Timer />
-          <GoalsInput />
-        </div>
+        {!isZenMode && (
+          <div className="space-y-6 w-1/3">
+            <Timer />
+            <GoalsInput />
+          </div>
+        )}
 
         {/* Right Column */}
-        <div className="space-y-6 w-1/3">
-          <BackgroundChooser
-            onBackgroundChange={handleBackgroundChange}
-            selectedIndex={selectedBackgroundIndex} // Pass selected index
-            backgrounds={availableBackgrounds} // Provide available backgrounds with paths and thumbnails
-          />
-          <AudioControls onAudioChange={handleAudioChange} />
-        </div>
+        {!isZenMode && (
+          <div className="space-y-6 w-1/3">
+            <BackgroundChooser
+              onBackgroundChange={handleBackgroundChange}
+              selectedIndex={selectedBackgroundIndex}
+              backgrounds={availableBackgrounds}
+            />
+            <AudioControls onAudioChange={handleAudioChange} />
+          </div>
+        )}
       </main>
 
       {/* Embedded Audio Player */}

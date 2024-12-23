@@ -97,8 +97,8 @@ export default function AudioControls({ onAudioChange }: AudioControlsProps) {
       >
         <option value="">Select a Lo-Fi Track</option>
         <option value="/assets/lo-fi.mp3">Lo-Fi Track 1</option>
-        <option value="/assets/lo-fi-2.mp3">Lo-Fi Track 2</option>
-        <option value="/assets/lo-fi-3.mp3">Lo-Fi Track 3</option>
+        <option value="/assets/lo-fi2.mp3">Lo-Fi Track 2</option>
+        <option value="/assets/lo-fi3.mp3">Lo-Fi Track 3</option>
       </select>
 
       {/* Volume Control */}
